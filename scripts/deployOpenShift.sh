@@ -67,6 +67,10 @@ echo $(date) " - Install Podman"
 yum install -y podman
 echo $(date) " - Install Podman Complete"
 
+echo $(data) " - Install jq"
+yum -y install jq
+echo $(date) " - Install jq Complete"
+
 echo $(date) " - Install httpd-tools"
 yum install -y httpd-tools
 echo $(date) " - Install httpd-tools Complete"
