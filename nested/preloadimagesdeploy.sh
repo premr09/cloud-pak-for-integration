@@ -53,7 +53,7 @@
 		"projectName": {
 			"type": "string",
 			"metadata": {
-				"description": "Project name to deploy CloudPak for Data to"
+				"description": "Project name to deploy CloudPak for Integration to"
 			}
 		},
 		"location": {
