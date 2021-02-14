@@ -80,6 +80,12 @@
 				"description": "Domain name created with the App Service"
 			}
 		},
+		"apiKey": {
+			"type": "securestring",
+			"metadata": {
+				"description": "IBM Entitlement Key"
+			}
+		},
 		"platformNavigatorReplicas": {
 			"type": "int",
 			"metadata": {
