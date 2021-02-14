@@ -34,14 +34,15 @@ export INSTALLERHOME=/home/$SUDOUSER/.ibm
 
 export platformPassword="";
 
-
-var=0
-while [ $var -ne 0 ]; do
-echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
-oc login "https://api.${CLUSTERNAME}.${DOMAINNAME}:6443" -u $OPENSHIFTUSER -p $OPENSHIFTPASSWORD --insecure-skip-tls-verify=true
-var=$?
-echo "exit code: $var"
+function openshift_login {
+  var=0
+  while [ $var -ne 0 ]; do
+  echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
+  oc login "https://api.${CLUSTERNAME}.${DOMAINNAME}:6443" -u $OPENSHIFTUSER -p $OPENSHIFTPASSWORD --insecure-skip-tls-verify=true
+  var=$?
+  echo "exit code: $var"
 done
+}
 
 
 #Print a formatted time in minutes and seconds from the given input in seconds
@@ -300,6 +301,8 @@ function wait_for_product {
 function install {
   # -------------------- BEGIN INSTALLATION --------------------
   echo "INFO: Starting installation of Cloud Pak for Integration in $namespace"
+ 
+  openshift_login
   
   oc new-project $namespace
   # check if the project has been created - if not retry
