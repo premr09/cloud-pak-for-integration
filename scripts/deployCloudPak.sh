@@ -302,7 +302,13 @@ function install {
   # -------------------- BEGIN INSTALLATION --------------------
   echo "INFO: Starting installation of Cloud Pak for Integration in $namespace"
  
-  openshift_login
+  var=0
+  while [ $var -ne 0 ]; do
+    echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
+    oc login "https://api.${CLUSTERNAME}.${DOMAINNAME}:6443" -u $OPENSHIFTUSER -p $OPENSHIFTPASSWORD --insecure-skip-tls-verify=true
+    var=$?
+    echo "exit code: $var"
+  done
   
   oc new-project $namespace
   # check if the project has been created - if not retry
