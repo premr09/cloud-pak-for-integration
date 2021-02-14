@@ -2,79 +2,22 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"_artifactsLocation": {
+		"assembly": {
 			"type": "string",
 			"metadata": {
-				"description": "The base URL where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+				"description": "CloudPak assembly to install"
 			}
 		},
-		"_artifactsLocationSasToken": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Token for the base URL where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
-			}
-		},
-		"location": {
-			"type": "string",
-			"metadata": {
-				"description": "Region where the resources should be created in"
-			}
-		},
-		"openshiftDeploymentScriptUrl": {
+		"cloudPakDeploymentScriptUrl": {
 			"type": "string",
 			"metadata": {
 				"description": "Bastion prep script Url"
 			}
 		},
-		"openshiftDeploymentScriptFileName": {
+		"cloudPakDeploymentScriptFileName": {
 			"type": "string",
 			"metadata": {
 				"description": "Bastion prep script file name"
-			}
-		},
-		"masterInstanceCount": {
-			"type": "int",
-			"metadata": {
-				"description": "Number of OpenShift Master nodes"
-			}
-		},
-		"workerInstanceCount": {
-			"type": "int",
-			"metadata": {
-				"description": "Number of OpenShift nodes"
-			}
-		},
-		"adminUsername": {
-			"type": "string",
-			"minLength": 1,
-			"metadata": {
-				"description": "Administrator username on all VMs"
-			}
-		},
-		"openshiftUsername": {
-			"type": "securestring",
-			"minLength": 1,
-			"metadata": {
-				"description": "Administrator password for OpenShift Console"
-			}
-		},
-		"openshiftPassword": {
-			"type": "securestring",
-			"minLength": 1,
-			"metadata": {
-				"description": "Administrator password for OpenShift Console"
-			}
-		},
-		"aadClientId": {
-			"type": "string",
-			"metadata": {
-				"description": "Azure AD Client ID"
-			}
-		},
-		"aadClientSecret": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Azure AD Client Secret"
 			}
 		},
 		"redHatTags": {
@@ -83,29 +26,28 @@
 				"description": "Red Hat Tags"
 			}
 		},
-		"pullSecret": {
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Admin Username"
+			}
+		},
+		"ocuser": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Username"
+			}
+		},
+		"ocpassword": {
 			"type": "securestring",
-			"minLength": 1,
 			"metadata": {
-				"description": "OCP Pull Secret"
-			}
-		},
-		"virtualNetworkName": {
-			"type": "string",
-			"metadata": {
-				"description": "Virtual Network Cluster is deployed in"
-			}
-		},
-		"virtualNetworkCIDR": {
-			"type": "string",
-			"metadata": {
-				"description": "Virtual Network address prefix"
+				"description": "OpenShift Password"
 			}
 		},
 		"storageOption": {
 			"type": "string",
 			"metadata": {
-				"description": "nfs or glusterfs"
+				"description": "Storage for CPI installation"
 			}
 		},
 		"bastionHostname": {
@@ -114,40 +56,16 @@
 				"description": "Bastion Hostname"
 			}
 		},
-		"nfsIpAddress": {
+		"projectName": {
 			"type": "string",
 			"metadata": {
-				"description": "NFS Hostname"
+				"description": "Project name to deploy CloudPak for Integration to"
 			}
 		},
-		"singleZoneOrMultiZone": {
+		"location": {
 			"type": "string",
 			"metadata": {
-				"description": "Deploy to a Single AZ or multiple AZs"
-			}
-		},
-		"dnsZone": {
-			"type": "string",
-			"metadata": {
-				"description": "Domain name created with the App Service"
-			}
-		},
-		"dnsZoneRG": {
-			"type": "string",
-			"metadata": {
-				"description": "Resource Group that contains the domain name"
-			}
-		},
-		"masterInstanceType": {
-			"type": "string",
-			"metadata": {
-				"description": "OpenShift Master VM size. Use VMs with Premium Storage support only."
-			}
-		},
-		"workerInstanceType": {
-			"type": "string",
-			"metadata": {
-				"description": "OpenShift Node VM(s) size. Use VMs with Premium Storage support only."
+				"description": "Region where the resources should be created in"
 			}
 		},
 		"clusterName": {
@@ -156,78 +74,104 @@
 				"description": "Cluster resources prefix"
 			}
 		},
-		"networkResourceGroup": {
+		"domainName": {
 			"type": "string",
 			"metadata": {
-				"description": "Resource Group for Vnet."
+				"description": "Domain name created with the App Service"
 			}
 		},
-		"masterSubnetName": {
-			"type": "string",
+		"platformNavigatorReplicas": {
+			"type": "int",
 			"metadata": {
-				"description": "Name of new or existing master subnet"
+				"description": "Number of Platform Navigator Pods"
 			}
 		},
-		"workerSubnetName": {
-			"type": "string",
-			"metadata": {
-				"description": "Name of new or existing worker subnet"
-			}
-		},
-		"enableFips": {
+		"capabilityAPIConnect": {
 			"type": "bool",
-            "metadata": {
-                "description": "Enable FIPS encryption"
-            }
-		},
-		"privateOrPublic": {
-			"type": "string",
 			"metadata": {
-				"description": "Public or private facing endpoints"
+				"description": "Deploy IBM API Connect Capability"
 			}
 		},
-		"sshPublicKey": {
-			"type": "string",
+		"capabilityAPPConnectDashboard": {
+			"type": "bool",
 			"metadata": {
-				"description": "SSH public key for all VMs"
+				"description": "Deploy IBM App Connect Dashboard Capability"
+			}
+		},
+		"capabilityAPPConenctDesigner": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy IBM App Connect Designer Capability"
+			}
+		},
+		"capabilityAssetRepository": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy IBM Asset Repository Capability"
+			}
+		},
+		"capabilityOperationsDashboard": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy IBM Operations Dashboard Capability"
+			}
+		},
+		"runtimeMQ": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy IBM MQ Runtime"
 			}
 		}
+		"runtimeKafka": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy Kafka Runtime"
+			}
+		},
+		"runtimeAspera": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy IBM Aspera Runtime"
+			}
+		},
+		"runtimeDataPower": {
+			"type": "bool",
+			"metadata": {
+				"description": "Deploy IBM DataPower runtime"
+			}
+		}
+		
 	},
 	"variables": {
-		"singlequote": "'",
-		"tenantId": "[subscription().tenantId]",
-		"subscriptionId": "[subscription().subscriptionId]",
-		"resourceGroupName": "[resourceGroup().name]",
-		"cidr-prefix": "[split(parameters('virtualNetworkCIDR'), '.')[0]]",
-		"clusterNetworkCidr": "[concat(variables('cidr-prefix'), '.128.0.0/14')]",
-		"hostAddressPrefix": 23,
-		"serviceNetworkCidr": "192.30.0.0/16"
 	},
-	"resources": [{
-		"type": "Microsoft.Compute/virtualMachines/extensions",
-		"name": "[concat(parameters('bastionHostname'), '/deployOpenshift')]",
-		"location": "[parameters('location')]",
-		"apiVersion": "2019-07-01",
-		"tags": {
-			"displayName": "DeployOpenshift",
-			"app": "[parameters('redHatTags').app]",
-			"version": "[parameters('redHatTags').version]",
-			"platform": "[parameters('redHatTags').platform]"
-		},
-		"properties": {
-			"publisher": "Microsoft.Azure.Extensions",
-			"type": "CustomScript",
-			"typeHandlerVersion": "2.0",
-			"autoUpgradeMinorVersion": true,
-			"settings": {
-				"fileUris": [
-					"[parameters('openshiftDeploymentScriptUrl')]"
-				]
+	"resources": [
+		{
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(parameters('bastionHostname'), '/deployOpenshift')]",
+			"location": "[parameters('location')]",
+			"apiVersion": "2019-07-01",
+			"tags": {
+				"displayName": "DeployCloudPak",
+				"app": "[parameters('redHatTags').app]",
+				"version": "[parameters('redHatTags').version]",
+				"platform": "[parameters('redHatTags').platform]"
 			},
-			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', parameters('openshiftDeploymentScriptFileName'), ' \"', parameters('adminUsername'), '\" ', '\"', parameters('openshiftPassword'), '\" ', '\"', parameters('sshPublicKey'), '\" ', '\"', parameters('workerInstanceCount'), '\" ', '\"', parameters('masterInstanceCount'), '\" ', '\"', variables('subscriptionId'), '\" ', '\"', variables('tenantId'), '\" ', '\"', parameters('aadClientId'), '\" ', '\"', parameters('aadClientSecret'), '\" ', '\"', variables('resourceGroupName'), '\" ', '\"', parameters('location'), '\" ', ' \"', parameters('virtualNetworkName'), '\"', ' \"dummy_pxSpecUrl\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('nfsIpAddress'), '\"', ' \"', parameters('singleZoneOrMultiZone'), '\"', ' \"', parameters('_artifactsLocation'), '\"', ' \"', parameters('_artifactsLocationSasToken'), '\"', ' \"', parameters('dnsZone'), '\"', ' \"', parameters('masterInstanceType'), '\"', ' \"', parameters('workerInstanceType'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', variables('clusterNetworkCidr'), '\"', ' \"', variables('hostAddressPrefix'), '\"', ' \"', parameters('virtualNetworkCIDR'), '\"', ' \"', variables('serviceNetworkCidr'), '\"', ' \"', parameters('dnsZoneRG'), '\"', ' \"', parameters('networkResourceGroup'), '\"', ' \"', parameters('masterSubnetName'), '\"', ' \"', parameters('workerSubnetName'), '\" ', variables('singlequote'), parameters('pullSecret'), variables('singlequote'), ' \"', parameters('enableFips'), '\"', ' \"', parameters('privateOrPublic'), '\"', ' \"', parameters('openshiftUsername'), '\"')]"
+			"properties": {
+				"publisher": "Microsoft.Azure.Extensions",
+				"type": "CustomScript",
+				"typeHandlerVersion": "2.0",
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"fileUris": [
+						"[parameters('cloudPakDeploymentScriptUrl')]"
+					]
+				},
+				"protectedSettings": {
+					"commandToExecute": "[concat('bash ', parameters('cloudPakDeploymentScriptFileName'), ' \"', parameters('adminUsername'), '\"', ' \"', parameters('ocpassword'), '\"', ' \"', parameters('projectName'), '\"', ' \"', parameters('storageOption'), '\"', ' \"', parameters('assembly'), '\"', ' \"', parameters('clusterName'), '\"', ' \"', parameters('domainName'), '\"', ' \"', parameters('ocuser'), '\"', ' \"', parameters('apiKey'), '\"', ' \"', parameters('platformNavigatorReplicas'), '\"', ' \"', parameters('capabilityAPIConnect'), '\"', ' \"', parameters('capabilityAPPConnectDashboard'), '\"', ' \"', parameters('capabilityAPPConenctDesigner'), '\"', ' \"', parameters('capabilityAssetRepository'), '\"', ' \"', parameters('capabilityOperationsDashboard'), '\"', ' \"', parameters('runtimeMQ'), '\"', ' \"', parameters('runtimeKafka'), '\"', ' \"', parameters('runtimeAspera'), '\"', ' \"', parameters('runtimeDataPower'), '\"')]"
+				}
 			}
 		}
-	}],
-	"outputs": {}
+	],
+	"outputs": {
+	}
 }
