@@ -301,14 +301,12 @@ function wait_for_product {
 function install {
   # -------------------- BEGIN INSTALLATION --------------------
   echo "INFO: 1111 Starting installation of Cloud Pak for Integration in $namespace for $SUDOUSER"
- echo "1"
-  var=0
-  while [ $var -ne 0 ]; do
-    echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
-    oc login "https://api.${CLUSTERNAME}.${DOMAINNAME}:6443" -u $OPENSHIFTUSER -p $OPENSHIFTPASSWORD --insecure-skip-tls-verify=true
-    var=$?
-    echo "exit code: $var"
-  done
+  echo "1"
+  
+  echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
+  oc login "https://api.${CLUSTERNAME}.${DOMAINNAME}:6443" -u $OPENSHIFTUSER -p $OPENSHIFTPASSWORD --insecure-skip-tls-verify=true
+  var=$?
+  echo "exit code: $var"
   echo "2"
   oc new-project $namespace
   # check if the project has been created - if not retry
