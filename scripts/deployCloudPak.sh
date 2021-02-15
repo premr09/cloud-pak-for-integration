@@ -300,7 +300,7 @@ function wait_for_product {
 
 function install {
   # -------------------- BEGIN INSTALLATION --------------------
-  echo "INFO: Starting installation of Cloud Pak for Integration in $namespace for $SUDOUSER"
+  echo "INFO: 1111 Starting installation of Cloud Pak for Integration in $namespace for $SUDOUSER"
  echo "1"
   var=0
   while [ $var -ne 0 ]; do
