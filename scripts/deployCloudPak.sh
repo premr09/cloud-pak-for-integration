@@ -301,7 +301,7 @@ function wait_for_product {
 function install {
   # -------------------- BEGIN INSTALLATION --------------------
   echo "INFO: Starting installation of Cloud Pak for Integration in $namespace"
- 
+ echo "1"
   var=0
   while [ $var -ne 0 ]; do
     echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
@@ -309,12 +309,13 @@ function install {
     var=$?
     echo "exit code: $var"
   done
-  
+  echo "2"
   oc new-project $namespace
   # check if the project has been created - if not retry
   oc get project $namespace
   if [[ $? == 1 ]]
     then
+      echo "3"
       retry false
   fi
   
