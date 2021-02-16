@@ -422,7 +422,7 @@ EOF
   
   # Instantiate Platform Navigator
   echo "INFO: Instantiating Platform Navigator"
-  #install_platform_navigator
+  install_platform_navigator
   
   # Printing the platform navigator object status
   route=$(oc get route -n ${namespace} ${namespace}-navigator-pn -o json | jq -r .spec.host);
