@@ -8,16 +8,16 @@ export DOMAINNAME=$7
 export OPENSHIFTUSER=$8
 export namespace=$3
 export entitlementKey=$9
-export platformNavigatorReplicas=$10
-export capabilityAPIConnect=$11
-export capabilityAPPConnectDashboard=$12
-export capabilityAPPConenctDesigner=$13
-export capabilityAssetRepository=$14
-export capabilityOperationsDashboard=$15;
-export runtimeMQ=$16;
-export runtimeKafka=$17;
-export runtimeAspera=$18;
-export runtimeDataPower=$19;
+export platformNavigatorReplicas=${10}
+export capabilityAPIConnect=${11}
+export capabilityAPPConnectDashboard=${12}
+export capabilityAPPConenctDesigner=${13}
+export capabilityAssetRepository=${14}
+export capabilityOperationsDashboard=${15}
+export runtimeMQ=${16}
+export runtimeKafka=${17}
+export runtimeAspera=${18}
+export runtimeDataPower=${19}
 
 #Pre-defined values
 #TODO: Can be user-provided
