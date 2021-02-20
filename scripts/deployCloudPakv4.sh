@@ -18,9 +18,8 @@ export runtimeMQ=${16}
 export runtimeKafka=${17}
 export runtimeAspera=${18}
 export runtimeDataPower=${19}
-export productInstallationPath=${20}
 
-Pre-defined values
+#Pre-defined values
 #TODO: Can be user-provided
 
 maxWaitTime=600
@@ -68,12 +67,12 @@ function retry {
     # uninstall
     sh ./cp4i-uninstall.sh -n ${namespace}
   fi
-  
+
   # incermenent currentTrial
   currentTrial=$((currentTrial + 1))
 
   if [[ $currentTrial -gt $maxTrials ]]
-    then 
+    then
     echo "ERROR: Max Install Trials Reached, exiting now";
     exit 1
   else
@@ -245,10 +244,10 @@ EOF
     if [ $time -gt $maxWaitTime ]; then
       echo "ERROR: Exiting installation Platform Navigator object is not ready"
       if [[ $RETRIED == false ]]
-      then 
+      then
         echo "INFO: Retrying to install Platform Navigator"
         install_platform_navigator true
-      else 
+      else
       retry true
       fi
     fi
@@ -273,7 +272,7 @@ function wait_for_product {
           status=true
         fi
 
-    if [ "$status" == false ] 
+    if [ "$status" == false ]
     then
         currentStatus="$(oc get ${type} -n ${namespace} ${release_name} -o json | jq -r '.status.phase')"
 
@@ -284,7 +283,7 @@ function wait_for_product {
     fi
 
 
-  
+
     echo "INFO: The ${type}   status:"
     echo "INFO: $(oc get ${type} -n ${namespace} ${release_name} )"
     if [ $time -gt $maxWaitTime ]; then
@@ -303,7 +302,7 @@ function install {
   # -------------------- BEGIN INSTALLATION --------------------
   echo "INFO: 1111 Starting installation of Cloud Pak for Integration in $namespace for $SUDOUSER"
   echo "1"
-  
+
   echo "Attempting to login $OPENSHIFTUSER to https://api.${CLUSTERNAME}.${DOMAINNAME}:6443 "
   oc login "https://api.${CLUSTERNAME}.${DOMAINNAME}:6443" -u $OPENSHIFTUSER -p $OPENSHIFTPASSWORD --insecure-skip-tls-verify=true
   var=$?
@@ -317,21 +316,21 @@ function install {
       echo "3"
       retry false
   fi
-  
+
   # Create IBM Entitlement Key Secret
   oc create secret docker-registry ibm-entitlement-key \
       --docker-username=cp \
       --docker-password=$entitlementKey \
       --docker-server=cp.icr.io \
       --namespace=${namespace}
-  
+
   # check if it has been created - if not retry
   oc get secret ibm-entitlement-key -n $namespace
   if [[ $? == 1 ]]
     then
       retry false
   fi
-  
+
   #Create Open Cloud and IBM Cloud Operator CatalogSource
   cat <<EOF | oc apply -f -
 apiVersion: operators.coreos.com/v1alpha1
@@ -363,20 +362,20 @@ spec:
       interval: 45m
 ---
 EOF
-  
+
   # check if Operator catalog source has been created - if not retry
   oc get CatalogSource opencloud-operators -n openshift-marketplace
   if [[ $? == 1 ]]
     then
       retry false
   fi
-  
+
   oc get CatalogSource ibm-operator-catalog -n openshift-marketplace
   if [[ $? == 1 ]]
     then
       retry false
   fi
-  
+
   cat <<EOF | oc apply -f -
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
@@ -387,29 +386,29 @@ spec:
   targetNamespaces:
     - ${namespace}
 EOF
-  
+
   # check if Operator Group has been created
   oc get OperatorGroup ${namespace}-og -n ${namespace}
   if [[ $? != 0 ]]
     then
       retry false
   fi
-  
+
   # install common services
   echo "INFO: Applying individual subscriptions for cp4i dependencies"
   create_subscription ${namespace} "opencloud-operators" "ibm-common-service-operator" "stable-v1"
-  
+
   # wait for the Operand Deployment Lifecycle Manager to be installed
   wait_for_subscription ibm-common-services operand-deployment-lifecycle-manager-app
   if [[ $? != 0 ]]
     then
       retry true
   fi
-  
+
   # install all the operators one by one
   echo "INFO: Installing CP4I operators..."
   create_subscription ${namespace} "certified-operators" "couchdb-operator-certified" "stable"
-  create_subscription ${namespace} "ibm-operator-catalog" "ibm-cloud-databases-redis-operator" "v1.1"  
+  create_subscription ${namespace} "ibm-operator-catalog" "ibm-cloud-databases-redis-operator" "v1.1"
   create_subscription ${namespace} "ibm-operator-catalog" "aspera-hsts-operator" "v1.1"
   #create_subscription ${namespace} "ibm-operator-catalog" "datapower-operator" "v1.1"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-appconnect" "v1.0"
@@ -420,86 +419,84 @@ EOF
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-integration-platform-navigator" "v4.0"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-apiconnect" "v2.0"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-integration-operations-dashboard" "v2.0"
-  
+
   # Instantiate Platform Navigator
   echo "INFO: Instantiating Platform Navigator"
   #install_platform_navigator
-  
+
   # Printing the platform navigator object status
   route=$(oc get route -n ${namespace} ${namespace}-navigator-pn -o json | jq -r .spec.host);
-  #echo "INFO: The platform navigator object status:"
+  echo "INFO: The platform navigator object status:"
   echo "INFO: $(oc get PlatformNavigator -n ${namespace} ${namespace}-navigator)"
   echo "INFO: PLATFORM NAVIGATOR ROUTE IS: $route";
-  
+
   # Check if the platform navigator UI is reachable
   response=$(curl -k -I "https://${route}")
   if [[ $response != *"200 OK"* ]]; then
     # if navigator ui is not there
     retry true
   fi
-  
+
   echo "INFO: CP4I Installed Successfully on project ${namespace}"
-  
-  if [[ "$capabilityOperationsDashboard" == "true" ]] 
+
+  if [[ "$capabilityOperationsDashboard" == "true" ]]
   then
     echo "INFO: Installing Capability Operations Dashboard";
     sh ${deploymentScriptsPath}/release-tracing.sh -n ${namespace} -r operations-dashboard -f ${storageClass} -p -b gp2
     wait_for_product OperationsDashboard operations-dashboard
   fi
-  
-  if [[ "$capabilityAPIConnect" == "true" ]] 
+
+  if [[ "$capabilityAPIConnect" == "true" ]]
   then
     echo "INFO: Installing Capability API Connect";
     sh ${deploymentScriptsPath}/release-apic.sh -n ${namespace} -r api -p
     wait_for_product APIConnectCluster api
   fi
-  
-  if [[ "$capabilityAPPConnectDashboard" == "true" ]] 
+
+  if [[ "$capabilityAPPConnectDashboard" == "true" ]]
   then
     echo "INFO: Installing Capability App Connect Dashbaord";
     sh ${deploymentScriptsPath}/release-ace-dashboard.sh -n ${namespace} -r app-connect-dashboard -s ${storageClass} -p
     wait_for_product Dashboard app-connect-dashboard
-    
+
   fi
-  
-  if [[ "$capabilityAPPConenctDesigner" == "true" ]] 
+
+  if [[ "$capabilityAPPConenctDesigner" == "true" ]]
   then
     echo "INFO: Installing Capability App Connect Designer";
     sh ${deploymentScriptsPath}/release-ace-designer.sh -n ${namespace} -r app-connect-designer -s ${storageClass}
     wait_for_product Dashboard DesignerAuthoring Dashboard app-connect-designer
   fi
-  
-  if [[ "$capabilityAssetRepository" == "true" ]] 
+
+  if [[ "$capabilityAssetRepository" == "true" ]]
   then
     echo "INFO: Installing Capability Asset Repository";
     sh ${deploymentScriptsPath}/release-ar.sh -n ${namespace} -r assets-repo -a ${storageClass} -c ${storageClass}
     wait_for_product AssetRepository assets-repo
   fi
-  
-  if [[ "$runtimeMQ" == "true" ]] 
+
+  if [[ "$runtimeMQ" == "true" ]]
   then
     echo "INFO: Installing Runtime MQ";
-    echo "Product Installation Path: ${productInstallationPath}" 
-    curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
-    #sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
-    #wait_for_product QueueManager mq
+    sh ${deploymentScriptsPath}/release-mq.sh -n ${namespace} -r mq  -z ${namespace}
+    wait_for_product QueueManager mq
   fi
-  
-  if [[ "$runtimeKafka" == "true" ]] 
+
+  if [[ "$runtimeKafka" == "true" ]]
   then
     echo "INFO: Installing Runtime Kafka";
     sh ${deploymentScriptsPath}/release-es.sh -n ${namespace} -r kafka  -p -c ${storageClass}
     wait_for_product EventStreams kafka
   fi
-  
-  if [[ "$runtimeAspera" == "true" ]] 
+
+  if [[ "$runtimeAspera" == "true" ]]
   then
     echo "INFO: Installing Runtime Aspera";
     sh ${deploymentScriptsPath}/release-aspera.sh -n ${namespace} -r aspera -p -c ${storageClass} -k ${asperaKey}
     wait_for_product IbmAsperaHsts aspera
   fi
-  
-  if [[ "$runtimeDataPower" == "true" ]] 
+
+  if [[ "$runtimeDataPower" == "true" ]]
   then
     echo "INFO: Installing Runtime DataPower";
     sh ${deploymentScriptsPath}/release-datapower.sh -n ${namespace} -r datapower -p -a admin
@@ -510,4 +507,3 @@ EOF
 install
 
 exit 0
-
