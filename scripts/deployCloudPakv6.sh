@@ -21,6 +21,7 @@ export runtimeDataPower=${19}
 
 productInstallationPath="$(pwd)/products";
 
+echo "exiting file"
 #Pre-defined values
 #TODO: Can be user-provided
 
@@ -481,8 +482,9 @@ EOF
   then
     echo "INFO: Installing Runtime MQ";
     echo "Product Installation Path: ${productInstallationPath}" 
+    exit 1
     sh ${productInstallationPath}/install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
-    wait_for_product QueueManager mq
+    #wait_for_product QueueManager mq
   fi
   
   if [[ "$runtimeKafka" == "true" ]] 
