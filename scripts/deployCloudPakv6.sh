@@ -475,8 +475,9 @@ EOF
     sh ${deploymentScriptsPath}/release-ar.sh -n ${namespace} -r assets-repo -a ${storageClass} -c ${storageClass}
     wait_for_product AssetRepository assets-repo
   fi
-
-  if [[ "$runtimeMQ" == "true" ]]
+  
+  echo "installing MQ $runtimeMQ"
+  if [[ "$runtimeMQ" == "true" ]];
   then
     echo "INFO: Installing Runtime MQ";
     echo "Product Installation Path: ${productInstallationPath}"
@@ -484,8 +485,9 @@ EOF
     sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
     #wait_for_product QueueManager mq
   fi
-
-  if [[ "$runtimeKafka" == "true" ]]
+  
+  
+  if [[ "$runtimeKafka" == "true" ]];
   then
     echo "INFO: Installing Runtime Kafka";
     sh ${deploymentScriptsPath}/release-es.sh -n ${namespace} -r kafka  -p -c ${storageClass}
