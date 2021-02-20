@@ -480,7 +480,7 @@ EOF
   then
     echo "INFO: Installing Runtime MQ";
     echo "Product Installation Path: ${productInstallationPath}"
-    echo "Present Directory: $(pwd)
+    echo "Present Directory: $(pwd)"
     
     curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
     chmod +x install-mq.sh
