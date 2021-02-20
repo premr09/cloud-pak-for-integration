@@ -480,6 +480,7 @@ EOF
   if [[ "$runtimeMQ" == "true" ]] 
   then
     echo "INFO: Installing Runtime MQ";
+    echo "Product Installation Path: ${productInstallationPath}" 
     sh ${productInstallationPath}/install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
     wait_for_product QueueManager mq
   fi
