@@ -11,10 +11,6 @@ export tracing_flag=$8
 export web_console_flag=$9
 
 release_name="icp-mq"
-qm_name="QM-CP4I"
-qm_type="SingleInstance"
-tracing_flag=false
-web_console_flag=true
 
 echo "Logging to Openshift - https://api.${cluster_name}.${domain_name}:6443 .."
 var=0
