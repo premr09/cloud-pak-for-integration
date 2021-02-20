@@ -21,7 +21,10 @@ export runtimeDataPower=${19}
 
 productInstallationPath="$(pwd)/products";
 
+echo ${pwd}
+echo ${productInstallationPath}
 echo "exiting file"
+exit 125
 #Pre-defined values
 #TODO: Can be user-provided
 
