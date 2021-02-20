@@ -480,8 +480,11 @@ EOF
   then
     echo "INFO: Installing Runtime MQ";
     echo "Product Installation Path: ${productInstallationPath}"
-    #curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
-    sh ./product_scripts/install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
+    echo "Present Directory: $(pwd)
+    
+    curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
+    chmod +x install-mq.sh
+    sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
     #wait_for_product QueueManager mq
   fi
   
