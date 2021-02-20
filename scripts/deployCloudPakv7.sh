@@ -18,14 +18,11 @@ export runtimeMQ=${16}
 export runtimeKafka=${17}
 export runtimeAspera=${18}
 export runtimeDataPower=${19}
+export productInstallationPath=${20}
 
 productInstallationPath="$(pwd)/products";
 
-echo ${pwd}
-echo ${productInstallationPath}
-echo "exiting file"
-exit 125
-#Pre-defined values
+Pre-defined values
 #TODO: Can be user-provided
 
 maxWaitTime=600
@@ -485,8 +482,8 @@ EOF
   then
     echo "INFO: Installing Runtime MQ";
     echo "Product Installation Path: ${productInstallationPath}" 
-    exit 1
-    sh ${productInstallationPath}/install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
+    curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
+    sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
     #wait_for_product QueueManager mq
   fi
   
