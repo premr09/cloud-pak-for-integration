@@ -18,8 +18,9 @@ export runtimeMQ=${16}
 export runtimeKafka=${17}
 export runtimeAspera=${18}
 export runtimeDataPower=${19}
+export productInstallationPath=${20}
 
-#Pre-defined values
+Pre-defined values
 #TODO: Can be user-provided
 
 maxWaitTime=600
@@ -426,7 +427,7 @@ EOF
 
   # Printing the platform navigator object status
   route=$(oc get route -n ${namespace} ${namespace}-navigator-pn -o json | jq -r .spec.host);
-  echo "INFO: The platform navigator object status:"
+  #echo "INFO: The platform navigator object status:"
   echo "INFO: $(oc get PlatformNavigator -n ${namespace} ${namespace}-navigator)"
   echo "INFO: PLATFORM NAVIGATOR ROUTE IS: $route";
 
@@ -478,8 +479,10 @@ EOF
   if [[ "$runtimeMQ" == "true" ]]
   then
     echo "INFO: Installing Runtime MQ";
-    sh ${deploymentScriptsPath}/release-mq.sh -n ${namespace} -r mq  -z ${namespace}
-    wait_for_product QueueManager mq
+    echo "Product Installation Path: ${productInstallationPath}"
+    curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
+    sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
+    #wait_for_product QueueManager mq
   fi
 
   if [[ "$runtimeKafka" == "true" ]]
