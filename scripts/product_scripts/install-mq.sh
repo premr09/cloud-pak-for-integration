@@ -60,16 +60,24 @@ EOF
 
 echo "Validating MQ installation.."
 mq=0
-
+time=0
 while [[ mq -eq 0 ]]; do
+
+	if [ $time -gt 5 ]; then
+      		echo "Timed-out : MQ Installation failed.."
+      		exit 1
+    	fi
+	
 	oc get pods -n ${namespace} | grep ${release_name} | grep Running | grep 1/1
 	resp=$?
 	if [[ resp -ne 0 ]]; then
 		echo -e "No running pods found for ${release_name} Waiting.."
+		time=$((time + 1))
 		sleep 60
 	else
 		mq=1;
 	fi
+	
 done
 
 echo "Installation completed: Queue Namager Name: ${qm_name}, Queue Manager Type: ${qm_type}"
