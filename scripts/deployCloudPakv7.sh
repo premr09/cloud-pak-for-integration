@@ -20,8 +20,6 @@ export runtimeAspera=${18}
 export runtimeDataPower=${19}
 export productInstallationPath=${20}
 
-productInstallationPath="$(pwd)/products";
-
 Pre-defined values
 #TODO: Can be user-provided
 
