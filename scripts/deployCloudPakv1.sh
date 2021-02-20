@@ -476,8 +476,7 @@ EOF
     wait_for_product AssetRepository assets-repo
   fi
   
-  echo "installing MQ $runtimeMQ"
-  if [[ "$runtimeMQ" == "true" ]];
+  if [[ "$runtimeMQ" == "True" ]]
   then
     echo "INFO: Installing Runtime MQ";
     echo "Product Installation Path: ${productInstallationPath}"
@@ -487,7 +486,7 @@ EOF
   fi
   
   
-  if [[ "$runtimeKafka" == "true" ]];
+  if [[ "$runtimeKafka" == "True" ]]
   then
     echo "INFO: Installing Runtime Kafka";
     sh ${deploymentScriptsPath}/release-es.sh -n ${namespace} -r kafka  -p -c ${storageClass}
