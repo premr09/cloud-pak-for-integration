@@ -479,9 +479,6 @@ EOF
   if [[ "$runtimeMQ" == "True" ]]
   then
     echo "INFO: Installing Runtime MQ";
-    echo "Product Installation Path: ${productInstallationPath}"
-    echo "Present Directory: $(pwd)"
-    
     curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
     chmod +x install-mq.sh
     sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} "QM_CP4I" "SingleInstance" false true
@@ -492,8 +489,10 @@ EOF
   if [[ "$runtimeKafka" == "True" ]]
   then
     echo "INFO: Installing Runtime Kafka";
-    sh ${deploymentScriptsPath}/release-es.sh -n ${namespace} -r kafka  -p -c ${storageClass}
-    wait_for_product EventStreams kafka
+    curl ${productInstallationPath}/install-mq.sh -o install-kafka.sh
+    chmod +x install-kafka.sh
+    sh install-kafka.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} "kafka-dev"
+    #wait_for_product EventStreams kafka
   fi
 
   if [[ "$runtimeAspera" == "true" ]]
