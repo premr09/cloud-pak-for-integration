@@ -62,6 +62,7 @@ EOF
         
 echo "Validating Kafka installation.."
 kafka=0
+zookeeper=0
 time=0
 
 while [[ kafka -eq 0 ]]; do
@@ -71,16 +72,35 @@ while [[ kafka -eq 0 ]]; do
       		exit 1
     	fi
 	
-	oc get pods -n ${namespace} | grep ${release_name} | grep Running | grep 1/1
+	oc get pods -n ${namespace} | grep ${release_name} | grep kafka | grep Running | grep 1/1
 	resp=$?
 	if [[ resp -ne 0 ]]; then
 		echo -e "No running pods found for ${release_name} Waiting.."
 		time=$((time + 1))
 		sleep 60
 	else
-		mq=1;
+		echo "Kafka Pod(s) are now running.." 
+		kafka=1;
 	fi
+done
+
+while [[ zookeeper -eq 0 ]]; do
+
+	if [ $time -gt 5 ]; then
+      		echo "Timed-out : Kafka Installation failed.."
+      		exit 1
+    	fi
 	
+	oc get pods -n ${namespace} | grep ${release_name} | grep zookeeper | grep Running | grep 1/1
+	resp=$?
+	if [[ resp -ne 0 ]]; then
+		echo -e "No running pods found for ${release_name} Waiting.."
+		time=$((time + 1))
+		sleep 60
+	else
+		echo "Zookeeper Pod(s) are now running.." 
+		zookeeper=1;
+	fi
 done
 
 echo "Installation completed: Kafka Name: ${qm_name}, Broker Count: 1, Zookeeper count: 1"
