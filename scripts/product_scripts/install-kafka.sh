@@ -37,10 +37,12 @@ spec:
   collector: {}
   restProducer: {}
   security:
-    internalTls: NONE
+    internalTls: TLSv1.2
   strimziOverrides:
     kafka:
       replicas: 1
+      authorization:
+        type: runas
       config:
         inter.broker.protocol.version: '2.6'
         interceptor.class.names: com.ibm.eventstreams.interceptors.metrics.ProducerMetricsInterceptor
@@ -49,7 +51,13 @@ spec:
         transaction.state.log.min.isr: 1
         transaction.state.log.replication.factor: 1
       listeners:
-        plain: {}
+        external:
+          authentication:
+            type: scram-sha-512
+          type: route
+        tls:
+          authentication:
+            type: tls
       metrics: {}
       storage:
         type: ephemeral
