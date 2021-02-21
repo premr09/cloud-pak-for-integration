@@ -484,7 +484,7 @@ EOF
     
     curl ${productInstallationPath}/install-mq.sh -o install-mq.sh
     chmod +x install-mq.sh
-    sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} "QM-CP4I" "SingleInstance" false true
+    sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} "QM_CP4I" "SingleInstance" false true
     #wait_for_product QueueManager mq
   fi
   
