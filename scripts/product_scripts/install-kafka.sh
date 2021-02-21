@@ -58,6 +58,7 @@ spec:
       metrics: {}
       storage:
         type: ephemeral
+EOF
         
 echo "Validating Kafka installation.."
 kafka=0
