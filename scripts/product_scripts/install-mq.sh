@@ -11,6 +11,11 @@ export tracing_flag=$8
 export web_console_flag=$9
 
 release_name="icp-mq"
+if [[ "$qm_name" == "" ]]; then
+ 	qm_name="QM_CP4I"
+ fi
+echo "QM Name:" ${qm_name} 
+echo "QM Type:" ${qm_type}
 
 echo "Logging to Openshift - https://api.${cluster_name}.${domain_name}:6443 .."
 var=0
