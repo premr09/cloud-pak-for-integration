@@ -488,7 +488,7 @@ EOF
   
   if [[ "$runtimeKafka" == "True" ]]
   then
-    echo "INFO: Installing Runtime Kafka";
+    echo "INFO: Installing Runtime Kafka..";
     curl ${productInstallationPath}/install-kafka.sh -o install-kafka.sh
     chmod +x install-kafka.sh
     sh install-kafka.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} "kafka-dev"
