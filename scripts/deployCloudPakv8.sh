@@ -465,8 +465,9 @@ EOF
   if [[ "$capabilityAPPConenctDesigner" == "True" ]]
   then
     echo "INFO: Installing Capability App Connect Designer";
-    sh ${deploymentScriptsPath}/release-ace-designer.sh -n ${namespace} -r app-connect-designer -s ${storageClass}
-    wait_for_product Dashboard DesignerAuthoring Dashboard app-connect-designer
+    curl ${productInstallationPath}/install-ace-designer.sh -o install-ace-designer.sh
+    chmod +x install-ace-designer.sh
+    sh install-ace-designer.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
   fi
 
   if [[ "$capabilityAssetRepository" == "true" ]]
