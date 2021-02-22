@@ -508,6 +508,22 @@ EOF
     sh ${deploymentScriptsPath}/release-datapower.sh -n ${namespace} -r datapower -p -a admin
     wait_for_product DataPowerService datapower
   fi
+  
+  if [[ "$runtimeAppConnectDesigner" == "True" ]]
+  then
+    echo "INFO: Installing Runtime App Connect Designer";
+    curl ${productInstallationPath}/install-ace-designer.sh -o install-ace-designer.sh
+    chmod +x install-ace-designer.sh
+    sh install-ace-designer.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} 
+  fi
+  
+  if [[ "$runtimeAppConnectDashboard" == "True" ]]
+  then
+    echo "INFO: Installing Runtime App Connect Dashboard";
+    curl ${productInstallationPath}/install-ace-dashboard.sh -o install-ace-dashboard.sh
+    chmod +x install-ace-dashboard.sh
+    sh install-ace-dashboard.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} 
+  fi
 }
 
 install
