@@ -454,15 +454,15 @@ EOF
     wait_for_product APIConnectCluster api
   fi
 
-  if [[ "$capabilityAPPConnectDashboard" == "true" ]]
+  if [[ "$capabilityAPPConnectDashboard" == "True" ]]
   then
-    echo "INFO: Installing Capability App Connect Dashbaord";
-    sh ${deploymentScriptsPath}/release-ace-dashboard.sh -n ${namespace} -r app-connect-dashboard -s ${storageClass} -p
-    wait_for_product Dashboard app-connect-dashboard
-
+    echo "INFO: Installing Runtime App Connect Dashboard";
+    curl ${productInstallationPath}/install-ace-dashboard.sh -o install-ace-dashboard.sh
+    chmod +x install-ace-dashboard.sh
+    sh install-ace-dashboard.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
   fi
 
-  if [[ "$capabilityAPPConenctDesigner" == "true" ]]
+  if [[ "$capabilityAPPConenctDesigner" == "True" ]]
   then
     echo "INFO: Installing Capability App Connect Designer";
     sh ${deploymentScriptsPath}/release-ace-designer.sh -n ${namespace} -r app-connect-designer -s ${storageClass}
@@ -507,23 +507,7 @@ EOF
     echo "INFO: Installing Runtime DataPower";
     sh ${deploymentScriptsPath}/release-datapower.sh -n ${namespace} -r datapower -p -a admin
     wait_for_product DataPowerService datapower
-  fi
-  
-  if [[ "$runtimeAppConnectDesigner" == "True" ]]
-  then
-    echo "INFO: Installing Runtime App Connect Designer";
-    curl ${productInstallationPath}/install-ace-designer.sh -o install-ace-designer.sh
-    chmod +x install-ace-designer.sh
-    sh install-ace-designer.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} 
-  fi
-  
-  if [[ "$runtimeAppConnectDashboard" == "True" ]]
-  then
-    echo "INFO: Installing Runtime App Connect Dashboard";
-    curl ${productInstallationPath}/install-ace-dashboard.sh -o install-ace-dashboard.sh
-    chmod +x install-ace-dashboard.sh
-    sh install-ace-dashboard.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} 
-  fi
+  fi   
 }
 
 install
