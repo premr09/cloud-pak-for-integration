@@ -51,7 +51,7 @@ while [[ acedsn -eq 0 ]]; do
       		exit 1
     	fi
 	
-	oc get pods -n ${namespace} | grep ${release_name} | grep Running | grep 1/1
+	oc get pods -n ${namespace} | grep ${release_name} | grep Running 
 	resp=$?
 	if [[ resp -ne 0 ]]; then
 		echo -e "No running pods found for ${release_name} Waiting.."
