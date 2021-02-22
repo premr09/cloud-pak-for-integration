@@ -42,9 +42,9 @@ spec:
             memory: 250Mi
   replicas: 1
   storage:
-    class: managed-premium
+    class: ''
     size: 5Gi
-    type: persistent-claim
+    type: ephemeral
   useCommonServices: true
   version: 11.0.0
 EOF
