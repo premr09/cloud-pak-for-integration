@@ -447,11 +447,12 @@ EOF
     wait_for_product OperationsDashboard operations-dashboard
   fi
 
-  if [[ "$capabilityAPIConnect" == "true" ]]
+  if [[ "$capabilityAPIConnect" == "True" ]]
   then
     echo "INFO: Installing Capability API Connect";
-    sh ${deploymentScriptsPath}/release-apic.sh -n ${namespace} -r api -p
-    wait_for_product APIConnectCluster api
+    curl ${productInstallationPath}/install-apic.sh -o install-apic.sh
+    chmod +x install-apic.sh
+    sh install-apic.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
   fi
 
   if [[ "$capabilityAPPConnectDashboard" == "True" ]]
