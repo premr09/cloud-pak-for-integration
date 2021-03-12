@@ -49,18 +49,18 @@ while [[ apic -eq 0 ]]; do
       		exit 1
     	fi
 	
-	oc get pods -n ${namespace} | grep ${release_name} | grep Running | grep gw
+	count=$(oc get pods -n ${namespace} | grep ${release_name} | wc -l)
 	resp=$?
-	if [[ resp -ne 0 ]]; then
-		echo -e "No running pods found for ${release_name} Waiting.."
+	if [[ count -ne 35 ]]; then
+		echo -e "Pods are still getting created for ${release_name} Waiting.."
 		time=$((time + 1))
 		sleep 60
 	else
-    echo "API Connect Installation successful.."
+    		echo "API Connect Installation successful.."
 		apic=1;
 	fi
     sleep 300
-    if [[ apic === 1 ]]; then
+    if [[ apic -eq 1 ]]; then
     	curl ${productInstallationPath}/apic/createProviderOrganization.sh -o create-provider-org.sh
 	curl ${productInstallationPath}/apic/publishProducts.sh -o publish-products.sh
 	curl ${productInstallationPath}/apic/createSubscription.sh -o create-subscription.sh
