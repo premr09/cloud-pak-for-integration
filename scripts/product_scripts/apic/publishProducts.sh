@@ -9,6 +9,10 @@ export products_folder_path=$6
 export user=$6
 export password=$7
 
+if [[ "$org" == "" ]]; then
+  org=cts-demo
+fi
+
 #Creating cluster endpoint
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 
