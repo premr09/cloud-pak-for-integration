@@ -59,7 +59,7 @@ while [[ apic -eq 0 ]]; do
     		echo "API Connect Installation successful.."
 		apic=1;
 	fi
-    sleep 300
+    
     if [[ apic -eq 1 ]]; then
     	curl ${productInstallationPath}/apic/createProviderOrganization.sh -o create-provider-org.sh
 	curl ${productInstallationPath}/apic/publishProducts.sh -o publish-products.sh
