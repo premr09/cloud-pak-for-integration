@@ -123,3 +123,5 @@ sleep 2
 apic catalog-settings:update --org ${org} --server ${apic_server} --catalog ${catalog} portal_config.yaml
 
 apic logout --server ${apic_server}
+
+sh publish-products.sh ${cluster_name} ${domain_name} ${namespace} ${apic_release_name} ${org}
