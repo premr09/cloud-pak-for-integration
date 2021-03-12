@@ -88,4 +88,4 @@ spec:
   configurations:
     - des-quickstart-designer-sc
 EOF
-
+echo "ACE IntegrationServer creation successful.."
