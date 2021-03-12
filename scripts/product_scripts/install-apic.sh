@@ -5,6 +5,7 @@ export domain_name=$2
 export openshift_user=$3
 export openshift_password=$4
 export namespace=$5
+export productInstallationPath=$6
 
 release_name="apic"
 echo "Release Name:" ${release_name}
@@ -43,7 +44,7 @@ apic=0
 time=0
 while [[ apic -eq 0 ]]; do
 
-	if [ $time -gt 5 ]; then
+	if [ $time -gt 3600 ]; then
       		echo "Timed-out : API Connect Installation failed.."
       		exit 1
     	fi
@@ -58,5 +59,14 @@ while [[ apic -eq 0 ]]; do
     echo "API Connect Installation successful.."
 		apic=1;
 	fi
+    sleep 300
+    if [[ apic === 1 ]]; then
+    	curl ${productInstallationPath}/apic/createProviderOrganization.sh -o create-provider-org.sh
+	curl ${productInstallationPath}/apic/publishProducts.sh -o publish-products.sh
+	curl ${productInstallationPath}/apic/createSubscription.sh -o create-subscription.sh
+    	chmod +x create-provider-org.sh publish-products.sh create-subscription.sh
+    	sh create-provider-org.sh ${CLUSTERNAME} ${DOMAINNAME} ${namespace} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${release_name}
+    fi
+	
 	
 done
