@@ -63,3 +63,29 @@ while [[ acedsn -eq 0 ]]; do
 	fi
 	
 done
+
+cat << EOF | oc apply -f -
+apiVersion: appconnect.ibm.com/v1beta1
+kind: IntegrationServer
+metadata:
+  name: ace-server-1
+  namespace: icp
+spec:
+  adminServerSecure: true
+  barURL: ''
+  designerFlowsOperationMode: disabled
+  license:
+    accept: true
+    license: L-APEH-BPUCJK
+    use: CloudPakForIntegrationNonProduction
+  replicas: 3
+  router:
+    timeout: 120s
+  service:
+    endpointType: http
+  useCommonServices: true
+  version: 11.0.0
+  configurations:
+    - des-quickstart-designer-sc
+EOF
+
