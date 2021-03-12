@@ -22,8 +22,8 @@ cat << EOF | oc apply -f -
 apiVersion: appconnect.ibm.com/v1beta1
 kind: DesignerAuthoring
 metadata:
-  name: ace-designer-quickstart
-  namespace: integration
+  name: ${release_name}
+  namespace: ${namespace}
 spec:
   couchdb:
     replicas: 1
