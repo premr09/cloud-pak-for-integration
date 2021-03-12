@@ -66,6 +66,7 @@ while [[ apic -eq 0 ]]; do
 	curl ${productInstallationPath}/apic/createSubscription.sh -o create-subscription.sh
 	mkdir -p products
 	cd products
+	echo ${productInstallationPath}/apic/products
 	wget --no-parent -r ${productInstallationPath}/apic/products
 	cd ../
     	chmod +x create-provider-org.sh publish-products.sh create-subscription.sh
