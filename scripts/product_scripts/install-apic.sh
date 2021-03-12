@@ -64,6 +64,15 @@ while [[ apic -eq 0 ]]; do
     	curl ${productInstallationPath}/apic/createProviderOrganization.sh -o create-provider-org.sh
 	curl ${productInstallationPath}/apic/publishProducts.sh -o publish-products.sh
 	curl ${productInstallationPath}/apic/createSubscription.sh -o create-subscription.sh
+	mkdir -p products
+	for FILE in ${products_folder_path}*product*; 
+	do 
+   	  if [[ -f "$FILE" ]]; then
+	    filename=$(basename "$FILE")
+	    curl $FILE -o filename
+	    mv filename ./products/.
+	  fi
+	done
     	chmod +x create-provider-org.sh publish-products.sh create-subscription.sh
     	sh create-provider-org.sh ${CLUSTERNAME} ${DOMAINNAME} ${namespace} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${release_name}
     fi
