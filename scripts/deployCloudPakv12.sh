@@ -452,7 +452,7 @@ EOF
     echo "INFO: Installing Capability API Connect";
     curl ${productInstallationPath}/install-apic.sh -o install-apic.sh
     chmod +x install-apic.sh
-    sh install-apic.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
+    sh install-apic.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} ${productInstallationPath}
   fi
 
   if [[ "$capabilityAPPConnectDashboard" == "True" ]]
