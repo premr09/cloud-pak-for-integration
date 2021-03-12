@@ -3,13 +3,19 @@
 export cluster_name=$1
 export domain_name=$2
 export namespace=$3
-export apic_release_name=$4
-export org=$5
-export catalog=$6
-export user=$7
-export password=$8
+export oc_username=$4
+export oc_password=$5
+export apic_release_name=$6
+export org=$7
+export catalog=$8
+export user=$9
+export password=${10}
 
-
+echo "Attempting to login $OPENSHIFTUSER to https://api.${cluster_name}.${domain_name}:6443 "
+oc login "https://api.${cluster_name}.${domain_name}:6443" -u $oc_username -p $oc_password --insecure-skip-tls-verify=true
+var=$?
+echo "exit code: $var"
+echo "2"
 
 #Creating cluster endpoint
 apic_server=$apic_release_name-mgmt-admin-$namespace.apps.$cluster_name.$domain_name
