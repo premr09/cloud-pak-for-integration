@@ -15,7 +15,7 @@ fi
 
 #Creating cluster endpoint
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
-
+apic --accept-license --live-help
 sleep 4
 echo "APIC Admin Endpoint :: ${apic_server}"
 
@@ -42,7 +42,7 @@ do
 done
 
 echo "Uploading APIs in draft state in API Manager"
-for FILE in ${products_folder_path}*; 
+for FILE in *; 
 do 
    if [[ -f "$FILE" ]]; then
      echo  "Uploading $(basename "$FILE")"
