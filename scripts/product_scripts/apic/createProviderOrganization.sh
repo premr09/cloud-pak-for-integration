@@ -118,7 +118,7 @@ fi
 #Getting Portal ID and Portal Service URL
 
 
-portalResponse=$(apic portal-services:list --server ${apim_server} --org admin --availability-zone availability-zone-default)
+portalResponse=$(apic portal-services:list --server ${apic_server} --org admin --availability-zone availability-zone-default)
 sleep 5
 portalURL=$(echo ${portalResponse} | cut -d' ' -f 2)
 
