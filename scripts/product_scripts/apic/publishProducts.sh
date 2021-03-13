@@ -16,11 +16,11 @@ fi
 #Creating cluster endpoint
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 
+sleep 4
 echo "APIC Admin Endpoint :: ${apic_server}"
 
 if [[ products_folder_path == "" ]]; then
-  pwd=$(pwd)
-  products_folder_path=pwd/products
+  products_folder_path="./products/"
 fi
  
 echo "Products Folder Path ${products_folder_path}" 
