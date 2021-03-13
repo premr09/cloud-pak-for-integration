@@ -102,7 +102,18 @@ apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$d
 orgResp=$(apic orgs:get --server ${apim_server} ${org} --fields id --output -)
 sleep 2
 orgid=$(echo $orgResp | cut -d' ' -f 2)
-echo "Org Id : $orgResp   : $orgid" 
+echo "Org Id : $orgResp   : $orgid"
+ret=0
+if [[ "$orgid" === "" ]]; then
+  orgResp=$(apic orgs:get --server ${apic_server} ${org} --fields id --output -)
+  sleep 2
+  orgid=$(echo $orgResp | cut -d' ' -f 2)
+  echo "Org Id : $orgResp   : $orgid  retry $ret"
+  ret=ret+1
+  if [[ ret === 2 ]]; then
+    orgid="NotFound"
+  fi
+fi
 
 #Getting Portal ID and Portal Service URL
 
