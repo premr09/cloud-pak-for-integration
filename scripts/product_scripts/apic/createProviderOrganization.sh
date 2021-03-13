@@ -47,11 +47,13 @@ fi
 #Accepting apic licenses
 echo "Accepting apic licenses"
 apic --accept-license
+sleep 2
 apic --live-help
+sleep 2
 #Logging to API Connect CMC as admin
 apic login --username admin --password "${password}" --server ${apic_server} --realm admin/default-idp-1
 echo
-
+sleep 5
 #Creating default user for API Manager
 output=$(cat << EOF | apic users:create --server ${apic_server} --org ${user} --user-registry api-manager-lur -
 username: apiadmin
@@ -67,6 +69,7 @@ URL=$(echo ${output} | cut -d' ' -f 9)
 owner_url="owner_url: ${URL}"
 echo "Owner URL: ${URL}"
 
+sleep 5
 #Creating Provider Organization
 orgoutput=$(cat << EOF | apic orgs:create --server ${apic_server} -
 name: ${org}
@@ -74,7 +77,7 @@ title: ${org}
 owner_url: ${URL}
 EOF
 )
-sleep 2
+sleep 5
 
 echo "Output ${orgoutput}"
 
@@ -82,12 +85,13 @@ echo "Output ${orgoutput}"
 echo "Logging out admin from CMC"
 apic logout --server ${apic_server}
 
-sleep 1
+sleep 5
 
 echo "Logging as newly created user apiadmin in Organization ${org} in API Manager"
 apic login --server ${apic_server} --username apiadmin --password "cts@1234" --realm provider/default-idp-2
 echo
 
+sleep 5
 echo "Gateway available for the organizaton"
 apic gateway-services:list --server ${apic_server} --scope org --org ${org}
 
@@ -96,14 +100,15 @@ echo "Assigning portal services to ${catalog}"
 apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 #Getting Organization Id
 orgResp=$(apic orgs:get --server ${apim_server} ${org} --fields id --output -)
-
+sleep 2
 orgid=$(echo ${orgResp} | cut -d' ' -f 2)
+
 
 #Getting Portal ID and Portal Service URL
 
 
 portalResponse=$(apic portal-services:list --server ${apim_server} --org admin --availability-zone availability-zone-default)
-
+sleep 5
 portalURL=$(echo ${portalResponse} | cut -d' ' -f 2)
 
 portalId=$(echo ${portalResponse} | cut -d'/' -f 10)
@@ -125,7 +130,7 @@ EOF
 
 sleep 2
 apic catalog-settings:update --org ${org} --server ${apic_server} --catalog ${catalog} portal_config.yaml
-
+sleep 4
 apic logout --server ${apic_server}
 
 sh publish-products.sh ${cluster_name} ${domain_name} ${namespace} ${apic_release_name} ${org}
