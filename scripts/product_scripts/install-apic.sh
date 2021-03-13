@@ -67,7 +67,8 @@ while [[ apic -eq 0 ]]; do
 	mkdir -p products
 	cd products
 	echo ${productInstallationPath}/apic/products
-	wget --no-parent -r ${productInstallationPath}/apic/products
+	curl ${productInstallationPath}/apic/apic/products/cts-demo-apic-api_1.0.0.yaml -o cts-demo-apic-api_1.0.0.yaml
+	curl ${productInstallationPath}/apic/apic/products/cts-demo-apic-product_1.0.0.yaml -o cts-demo-apic-product_1.0.0.yaml
 	cd ../
     	chmod +x create-provider-org.sh publish-products.sh create-subscription.sh
     	sh create-provider-org.sh ${CLUSTERNAME} ${DOMAINNAME} ${namespace} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${release_name}
