@@ -104,7 +104,7 @@ sleep 2
 orgid=$(echo $orgResp | cut -d' ' -f 2)
 echo "Org Id : $orgResp   : $orgid"
 ret=0
-if [[ "$orgid" === "" ]]; then
+if [[ "$orgid" == "" ]]; then
   orgResp=$(apic orgs:get --server ${apic_server} ${org} --fields id --output -)
   sleep 2
   orgid=$(echo $orgResp | cut -d' ' -f 2)
