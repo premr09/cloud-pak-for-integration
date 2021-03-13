@@ -46,7 +46,7 @@ fi
 
 #Accepting apic licenses
 echo "Accepting apic licenses"
-apic --accept-licenses
+apic --accept-license
 apic --live-help
 #Logging to API Connect CMC as admin
 apic login --username admin --password "${password}" --server ${apic_server} --realm admin/default-idp-1
