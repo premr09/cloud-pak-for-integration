@@ -107,6 +107,10 @@ portalURL=$(echo ${portalResponse} | cut -d' ' -f 2)
 
 portalId=$(echo ${portalResponse} | cut -d'/' -f 10)
 
+#Assigning Portal to ${catalog}
+echo "Assigning portal services to ${catalog}"
+apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
+
 portal_service_url=https://${apim_server}/api/orgs/${orgid}/portal-services/${portalId}
 echo "Portal URL ${portal_service_url}"
 
@@ -139,9 +143,7 @@ sleep 5
 echo "Gateway available for the organizaton"
 apic gateway-services:list --server ${apic_server} --scope org --org ${org}
 
-#Assigning Portal to ${catalog}
-echo "Assigning portal services to ${catalog}"
-apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
+
 
 
 sleep 4
