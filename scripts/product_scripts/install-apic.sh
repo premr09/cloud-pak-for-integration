@@ -70,8 +70,6 @@ while [[ apic -eq 0 ]]; do
 	wget --no-parent -r ${productInstallationPath}/apic/products
 	cd ../
     	chmod +x create-provider-org.sh publish-products.sh create-subscription.sh
-	apic --accept-licenses
-        apic --live-help
     	sh create-provider-org.sh ${CLUSTERNAME} ${DOMAINNAME} ${namespace} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${release_name}
     fi
 	
