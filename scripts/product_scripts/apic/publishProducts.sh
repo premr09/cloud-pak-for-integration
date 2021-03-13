@@ -19,9 +19,9 @@ apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$d
 sleep 4
 echo "APIC Admin Endpoint :: ${apic_server}"
 
-if [[ products_folder_path == "" ]]; then
-  products_folder_path="./products/"
-fi
+
+products_folder_path="./products/"
+
  
 echo "Products Folder Path ${products_folder_path}" 
 for FILE in ${products_folder_path}*product*; 
