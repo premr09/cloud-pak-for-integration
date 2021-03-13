@@ -15,7 +15,9 @@ fi
 
 #Creating cluster endpoint
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
-apic --accept-license --live-help
+apic --accept-license
+sleep 5
+apic --live-help
 sleep 5
 echo "APIC Admin Endpoint :: ${apic_server}"
 
