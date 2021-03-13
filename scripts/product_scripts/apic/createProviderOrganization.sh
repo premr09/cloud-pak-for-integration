@@ -99,7 +99,7 @@ apic gateway-services:list --server ${apic_server} --scope org --org ${org}
 echo "Assigning portal services to ${catalog}"
 apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 #Getting Organization Id
-orgResp=$(apic orgs:get --server ${apim_server} ${org} --fields id --output -)
+orgResp=$(apic orgs:get --server ${apic_server} ${org} --fields id --output -)
 sleep 2
 orgid=$(echo $orgResp | cut -d' ' -f 2)
 echo "Org Id : $orgResp   : $orgid"
@@ -139,7 +139,8 @@ portal:
     ${portal_service_url}
 EOF
 
-sleep 2
+sleep 5
+cat portal_config.yaml
 apic catalog-settings:update --org ${org} --server ${apic_server} --catalog ${catalog} portal_config.yaml
 sleep 4
 apic logout --server ${apic_server}
