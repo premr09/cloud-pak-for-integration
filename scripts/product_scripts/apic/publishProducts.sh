@@ -28,11 +28,13 @@ for FILE in ${products_folder_path}*product*;
 do 
    if [[ -f "$FILE" ]]; then
      echo  "Publishing $(basename "$FILE")"
-     apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $FILE
+     cd ${products_folder_path}
+     apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")
      var=$?
+     sleep 2
      if [[ var -eq 0 ]]; then
-       mkdir -p published
-       mv $FILE published/.
+       mkdir -p ../published
+       mv $FILE ../published/.
      fi
    else 
      echo "No Products to publish !!."
@@ -43,12 +45,12 @@ echo "Uploading APIs in draft state in API Manager"
 for FILE in ${products_folder_path}*; 
 do 
    if [[ -f "$FILE" ]]; then
-     echo  "Publishing $(basename "$FILE")"
-     apic draft-apis:create --server ${apic_server} --org ${org} $FILE
+     echo  "Uploading $(basename "$FILE")"
+     apic draft-apis:create --server ${apic_server} --org ${org} $(basename "$FILE")
      var=$?
      if [[ var -eq 0 ]]; then
-       mkdir -p draftapis
-       mv $FILE draftapis/.
+       mkdir -p ../draftapis
+       mv $FILE ../draftapis/.
      fi
    else 
      echo "No APIs to upload !!."
