@@ -101,8 +101,8 @@ apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$d
 #Getting Organization Id
 orgResp=$(apic orgs:get --server ${apim_server} ${org} --fields id --output -)
 sleep 2
-orgid=$(echo ${orgResp} | cut -d' ' -f 2)
-
+orgid=$(echo $orgResp | cut -d' ' -f 2)
+echo "Org Id : $orgResp   : $orgid" 
 
 #Getting Portal ID and Portal Service URL
 
