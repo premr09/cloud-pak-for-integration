@@ -109,7 +109,7 @@ if [[ "$orgid" == "" ]]; then
   sleep 2
   orgid=$(echo $orgResp | cut -d' ' -f 2)
   echo "Org Id : $orgResp   : $orgid  retry $ret"
-  ret=ret+1
+  ret=$((ret + 1))
   if [[ $ret == 2 ]]; then
     orgid="NotFound"
   fi
