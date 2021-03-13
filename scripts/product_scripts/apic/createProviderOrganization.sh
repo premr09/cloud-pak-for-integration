@@ -81,23 +81,6 @@ sleep 5
 
 echo "Output ${orgoutput}"
 
-
-echo "Logging out admin from CMC"
-apic logout --server ${apic_server}
-
-sleep 5
-
-echo "Logging as newly created user apiadmin in Organization ${org} in API Manager"
-apic login --server ${apic_server} --username apiadmin --password "cts@1234" --realm provider/default-idp-2
-echo
-
-sleep 5
-echo "Gateway available for the organizaton"
-apic gateway-services:list --server ${apic_server} --scope org --org ${org}
-
-#Assigning Portal to ${catalog}
-echo "Assigning portal services to ${catalog}"
-apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 #Getting Organization Id
 orgResp=$(apic orgs:get --server ${apic_server} ${org} --fields id --output -)
 sleep 2
@@ -142,6 +125,25 @@ EOF
 sleep 5
 cat portal_config.yaml
 apic catalog-settings:update --org ${org} --server ${apic_server} --catalog ${catalog} portal_config.yaml
+
+echo "Logging out admin from CMC"
+apic logout --server ${apic_server}
+
+sleep 5
+
+echo "Logging as newly created user apiadmin in Organization ${org} in API Manager"
+apic login --server ${apic_server} --username apiadmin --password "cts@1234" --realm provider/default-idp-2
+echo
+
+sleep 5
+echo "Gateway available for the organizaton"
+apic gateway-services:list --server ${apic_server} --scope org --org ${org}
+
+#Assigning Portal to ${catalog}
+echo "Assigning portal services to ${catalog}"
+apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
+
+
 sleep 4
 apic logout --server ${apic_server}
 
