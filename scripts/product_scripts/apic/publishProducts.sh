@@ -14,6 +14,7 @@ if [[ "$org" == "" ]]; then
 fi
 
 #Creating cluster endpoint
+echo '************* Inside publish-products.sh ***************'
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 apic --accept-license
 sleep 5
@@ -33,7 +34,7 @@ do
      cd ${products_folder_path}
      apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")
      var=$?
-     sleep 2
+     
      if [[ var -eq 0 ]]; then
        mkdir -p ../published
        mv $FILE ../published/.
@@ -42,7 +43,7 @@ do
      echo "No Products to publish !!."
    fi
 done
-
+sleep 5
 echo "Uploading APIs in draft state in API Manager"
 for FILE in *; 
 do 
