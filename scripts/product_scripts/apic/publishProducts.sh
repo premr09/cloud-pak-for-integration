@@ -32,9 +32,6 @@ for FILE in *product*;
 do 
    if [[ -f "$FILE" ]]; then
      echo  "Publishing $FILE"
-     
-     echo "apic products:publish --server $apic_server --org $org --scope catalog --catalog sandbox $FILE'
-     echo $cmd
      apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $FILE
      var=$?
      
