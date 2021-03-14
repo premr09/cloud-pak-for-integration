@@ -19,9 +19,9 @@ apic --accept-license
 sleep 5
 apic --live-help
 sleep 5
-echo "Logging to API Manager :: ${apic_server}"
+echo "Logging to API Manager :: ${apic_server} for user ${user} and password ${password}"
 
-apic login --server ${apic_server} --user ${user} --password ${password} --realm provider/default-realm-2
+apic login --server ${apic_server} --user ${user} --password ${password} --realm provider/default-idp-2
 
 sleep 5
 products_folder_path="./products/"
@@ -33,7 +33,7 @@ do
    if [[ -f "$FILE" ]]; then
      echo  "Publishing $(basename "$FILE")"
      
-     cmd='apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")'
+     echo "apic products:publish --server $apic_server --org $org --scope catalog --catalog sandbox $FILE'
      echo $cmd
      apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")
      var=$?
