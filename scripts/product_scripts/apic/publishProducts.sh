@@ -16,14 +16,14 @@ fi
 echo '************* Inside publish-products.sh ***************'
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 resp=$(apic --accept-license)
-sleep 5
+sleep 1
 lh=$(apic --live-help)
-sleep 5
+sleep 1
 echo "Logging to API Manager :: ${apic_server} for user ${user} and password ${password}"
 
 apic login --server ${apic_server} --user ${user} --password ${password} --realm provider/default-idp-2
 
-sleep 5
+sleep 2
 products_folder_path="./products/"
 cd ${products_folder_path}
  
@@ -31,11 +31,11 @@ echo "Products Folder Path ${products_folder_path}"
 for FILE in *product*; 
 do 
    if [[ -f "$FILE" ]]; then
-     echo  "Publishing $(basename "$FILE")"
+     echo  "Publishing $FILE"
      
      echo "apic products:publish --server $apic_server --org $org --scope catalog --catalog sandbox $FILE'
      echo $cmd
-     apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")
+     apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $FILE
      var=$?
      
      if [[ var -eq 0 ]]; then
@@ -51,8 +51,8 @@ echo "Uploading APIs in draft state in API Manager"
 for FILE in *; 
 do 
    if [[ -f "$FILE" ]]; then
-     echo  "Uploading $(basename "$FILE")"
-     apic draft-apis:create --server ${apic_server} --org ${org} $(basename "$FILE")
+     echo  "Uploading $FILE"
+     apic draft-apis:create --server ${apic_server} --org ${org} $FILE
      var=$?
      if [[ var -eq 0 ]]; then
        mkdir -p ../draftapis
