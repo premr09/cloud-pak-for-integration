@@ -14,7 +14,7 @@ fi
 
 #Creating cluster endpoint
 echo '************* Inside publish-products.sh ***************'
-apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
+apic_server=$apic_release_name-mgmt-admin-$namespace.apps.$cluster_name.$domain_name
 apic --accept-license
 sleep 2
 apic --live-help
