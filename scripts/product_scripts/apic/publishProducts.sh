@@ -15,10 +15,10 @@ fi
 #Creating cluster endpoint
 echo '************* Inside publish-products.sh ***************'
 apic_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
-resp=$(apic --accept-license)
-sleep 1
-lh=$(apic --live-help)
-sleep 1
+apic --accept-license
+sleep 2
+apic --live-help
+sleep 2
 echo "Logging to API Manager :: ${apic_server} for user ${user} and password ${password}"
 
 apic login --server ${apic_server} --username ${user} --password ${password} --realm provider/default-idp-2
