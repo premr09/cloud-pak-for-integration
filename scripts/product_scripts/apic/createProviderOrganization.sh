@@ -149,4 +149,4 @@ apic gateway-services:list --server ${apic_server} --scope org --org ${org}
 sleep 4
 apic logout --server ${apic_server}
 
-yes | sh publish-products.sh ${cluster_name} ${domain_name} ${namespace} ${apic_release_name} ${org} apiadmin "cts@1234"
+sh publish-products.sh ${cluster_name} ${domain_name} ${namespace} ${apic_release_name} ${org} apiadmin "cts@1234"
