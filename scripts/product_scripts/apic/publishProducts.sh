@@ -21,7 +21,7 @@ lh=$(apic --live-help)
 sleep 1
 echo "Logging to API Manager :: ${apic_server} for user ${user} and password ${password}"
 
-apic login --server ${apic_server} --user ${user} --password ${password} --realm provider/default-idp-2
+apic login --server ${apic_server} --username ${user} --password ${password} --realm provider/default-idp-2
 
 sleep 2
 products_folder_path="./products/"
