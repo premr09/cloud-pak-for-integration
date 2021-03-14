@@ -5,7 +5,6 @@ export domain_name=$2
 export namespace=$3
 export apic_release_name=$4
 export org=$5
-export products_folder_path=$6
 export user=$6
 export password=$7
 
@@ -20,18 +19,22 @@ apic --accept-license
 sleep 5
 apic --live-help
 sleep 5
-echo "APIC Admin Endpoint :: ${apic_server}"
+echo "Logging to API Manager :: ${apic_server}"
 
+apic login --server ${apic_server} --user ${user} --password ${password} --realm provider/default-realm-2
 
+sleep 5
 products_folder_path="./products/"
-
+cd ${products_folder_path}
  
 echo "Products Folder Path ${products_folder_path}" 
-for FILE in ${products_folder_path}*product*; 
+for FILE in *product*; 
 do 
    if [[ -f "$FILE" ]]; then
      echo  "Publishing $(basename "$FILE")"
-     cd ${products_folder_path}
+     
+     cmd='apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")'
+     echo $cmd
      apic products:publish --server ${apic_server} --org ${org} --scope catalog --catalog sandbox $(basename "$FILE")
      var=$?
      
