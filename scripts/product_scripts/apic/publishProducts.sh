@@ -12,6 +12,8 @@ if [[ "$org" == "" ]]; then
   org=cts-demo
 fi
 
+whoami
+
 #Creating cluster endpoint
 echo '************* Inside publish-products.sh ***************'
 apic_server=$apic_release_name-mgmt-admin-$namespace.apps.$cluster_name.$domain_name
@@ -32,7 +34,7 @@ for FILE in *product*;
 do 
    if [[ -f "$FILE" ]]; then
      echo  "Publishing $FILE"
-     apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help --debug cts-demo-apic-product_1.0.0.yaml
+     apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help cts-demo-apic-product_1.0.0.yaml
      var=$?
      
      if [[ var -eq 0 ]]; then
