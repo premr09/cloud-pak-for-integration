@@ -25,12 +25,12 @@ sleep 2
 
 echo "Logging to API Manager :: ${apic_server} for user ${user} and password ${password}"
 
-apic login --server ${apic_server} --username ${user} --password ${password} --realm provider/default-idp-2
+
 
 sleep 5
 products_folder_path="./products/"
 cd ${products_folder_path}
- 
+apic login --server ${apic_server} --username ${user} --password ${password} --realm provider/default-idp-2
 echo "Products Folder Path ${products_folder_path}" 
 for FILE in *product*; 
 do 
@@ -38,7 +38,7 @@ do
      echo  "Publishing $FILE"
      
      echo "User logged in : " 
-     apic me:get --server ${apic_server}
+     apic me:get --server ${apic_server} --accept-license --live-help
      apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help cts-demo-apic-product_1.0.0.yaml
      var=$?
      
