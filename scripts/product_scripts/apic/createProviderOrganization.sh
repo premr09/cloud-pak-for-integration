@@ -111,7 +111,7 @@ portalId=$(echo ${portalResponse} | cut -d'/' -f 10)
 echo "Assigning portal services to ${catalog}"
 apim_server=$apic_release_name-mgmt-api-manager-$namespace.apps.$cluster_name.$domain_name
 
-portal_service_url=https://${apim_server}/api/orgs/${orgid}/portal-services/${portalId}
+portal_service_url=https://${apic_server}/api/orgs/${orgid}/portal-services/${portalId}
 echo "Portal URL ${portal_service_url}"
 
 #Creating Portal Endpoint
@@ -127,9 +127,29 @@ portal:
 EOF
 
 sleep 5
-cat portal_config.yaml
-apic catalog-settings:update --org ${org} --server ${apic_server} --catalog ${catalog} portal_config.yaml
 
+
+#Setting mail server
+echo "Setting Demo Mail Server .. "
+
+cat << EOF | apic mail-servers:create --org admin --server ${apic_server}  -
+title: demo-email-server
+name: demo-email-server
+host: smtp.sendgrid.net
+port: 587
+credentials:
+  username: apikey
+  password: SG.Q2zQUTXTTcGqF6iTzhtVXA.V18213X6iHyHHbnMdJ3GoHW040zXkx9uQzkdv6qMTVk
+EOF
+
+echo "Updating cloud settings with email server ... "
+cat << EOF > cloud_config.yaml
+email_sender:
+  name: APIC Administrator
+  address: amitsrikiet@gmail.com
+
+EOF
+apic cloud-settings:update --server ${apic_server} cloud_config.yaml
 echo "Logging out admin from CMC"
 apic logout --server ${apic_server}
 
@@ -142,6 +162,9 @@ echo
 sleep 5
 echo "Gateway available for the organizaton"
 apic gateway-services:list --server ${apic_server} --scope org --org ${org}
+
+echo "Updating catalog settings for portal services"
+apic catalog-settings:update --org ${org} --server ${apic_server} --catalog ${catalog} portal_config.yaml
 
 echo "Publishing Products ..."
 apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help products/cts-demo-apic-product_1.0.0.yaml
