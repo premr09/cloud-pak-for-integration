@@ -17,10 +17,12 @@ whoami
 #Creating cluster endpoint
 echo '************* Inside publish-products.sh ***************'
 apic_server=$apic_release_name-mgmt-admin-$namespace.apps.$cluster_name.$domain_name
-apic --accept-license
+resp=$(apic --accept-license)
 sleep 2
-apic --live-help
+lh=$(apic --live-help)
 sleep 2
+
+
 echo "Logging to API Manager :: ${apic_server} for user ${user} and password ${password}"
 
 apic login --server ${apic_server} --username ${user} --password ${password} --realm provider/default-idp-2
@@ -34,6 +36,9 @@ for FILE in *product*;
 do 
    if [[ -f "$FILE" ]]; then
      echo  "Publishing $FILE"
+     
+     echo "User logged in : " 
+     apic me:get --server
      apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help cts-demo-apic-product_1.0.0.yaml
      var=$?
      
