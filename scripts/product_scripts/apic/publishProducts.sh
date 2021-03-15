@@ -38,7 +38,7 @@ do
      echo  "Publishing $FILE"
      
      echo "User logged in : " 
-     apic me:get --server
+     apic me:get --server ${apic_server}
      apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help cts-demo-apic-product_1.0.0.yaml
      var=$?
      
