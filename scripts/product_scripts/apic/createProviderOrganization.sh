@@ -146,10 +146,11 @@ EOF
 sleep 1
 mail_server=$(apic mail-servers:get --server  apic-mgmt-admin-icp.apps.cp-cluster.cloudpak-ipm.com --org admin demo-email-server --output - --fields url)
 mail_server_url=$(echo $orgresp | cut -d' ' -f 3)
+echo "mail server url : $mail_server_url"
 
 echo "Updating cloud settings with email server ... "
 cat << EOF > cloud_config.yaml
-mail_server_url: >- ${mail_server_url}
+mail_server_url: ${mail_server_url}
 email_sender:
   name: APIC Administrator
   address: amitsrikiet@gmail.com
