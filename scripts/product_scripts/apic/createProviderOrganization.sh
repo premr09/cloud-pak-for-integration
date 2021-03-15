@@ -146,7 +146,7 @@ EOF
 sleep 1
 mail_server=$(apic mail-servers:get --server  ${apic_server} --org admin demo-email-server --output - --fields url)
 echo $mail_server
-mail_server_url=$(echo $orgresp | cut -d' ' -f 2)
+mail_server_url=$(echo $orgresp | cut -d' ' -f 3)
 echo "mail server url : $mail_server_url"
 
 echo "Updating cloud settings with email server ... "
