@@ -142,13 +142,20 @@ credentials:
   password: SG.Q2zQUTXTTcGqF6iTzhtVXA.V18213X6iHyHHbnMdJ3GoHW040zXkx9uQzkdv6qMTVk
 EOF
 
+
+sleep 1
+mail_server=$(apic mail-servers:get --server  apic-mgmt-admin-icp.apps.cp-cluster.cloudpak-ipm.com --org admin demo-email-server --output - --fields url)
+mail_server_url=$(echo $orgresp | cut -d' ' -f 3)
+
 echo "Updating cloud settings with email server ... "
 cat << EOF > cloud_config.yaml
+mail_server_url: >- ${mail_server_url}
 email_sender:
   name: APIC Administrator
   address: amitsrikiet@gmail.com
 
 EOF
+
 apic cloud-settings:update --server ${apic_server} cloud_config.yaml
 echo "Logging out admin from CMC"
 apic logout --server ${apic_server}
