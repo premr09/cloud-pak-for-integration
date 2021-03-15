@@ -144,27 +144,19 @@ echo "Gateway available for the organizaton"
 apic gateway-services:list --server ${apic_server} --scope org --org ${org}
 
 echo "Publishing Products ..."
-
 apic me:get --server ${apic_server}
-echo "Products Folder Path ${products_folder_path}" 
-for FILE in ${products_folder_path}*product*; 
-do 
-   if [[ -f "$FILE" ]]; then
-     echo  "Publishing $FILE"
+apic version
+apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help products/cts-demo-apic-product_1.0.0.yaml
+var=$?
      
-     echo "User logged in : " 
-     apic me:get --server ${apic_server} --accept-license --live-help
-     apic products:publish --server ${apic_server} --org ${org} --catalog sandbox --accept-license --live-help products/cts-demo-apic-product_1.0.0.yaml
-     var=$?
-     
-     if [[ var -eq 0 ]]; then
-       mkdir -p ../published
-       mv $FILE ../published/.
-     fi
-   else 
-     echo "No Products to publish !!."
-   fi
-done
+if [[ var -eq 0 ]]; then
+   mkdir -p ../published
+   mv $FILE ../published/.
+fi
+else 
+  echo "No Products to publish !!."
+fi
+
 sleep 4
 apic logout --server ${apic_server}
 
