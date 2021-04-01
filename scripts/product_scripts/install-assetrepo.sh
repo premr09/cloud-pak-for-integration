@@ -71,7 +71,7 @@ provisioner: kubernetes.io/azure-disk
 parameters:
   kind: Managed
   storageaccounttype: Premium_LRS
-  storageAccount: ctsicpstorageaccount
+  storageAccount: ${storage_account}
 reclaimPolicy: Delete
 allowVolumeExpansion: false
 volumeBindingMode: WaitForFirstConsumer

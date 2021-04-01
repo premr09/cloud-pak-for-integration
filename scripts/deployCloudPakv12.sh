@@ -19,7 +19,7 @@ export runtimeKafka=${17}
 export runtimeAspera=${18}
 export runtimeDataPower=${19}
 export productInstallationPath=${20}
-export stroageAccountName=${21}
+export storageAccountName=${21}
 
 Pre-defined values
 #TODO: Can be user-provided
@@ -477,7 +477,7 @@ EOF
     echo "INFO: Installing Capability Asset Repository";
     curl ${productInstallationPath}/install-assetrepo.sh -o install-assetrepo.sh
 	chmod +x install-assetrepo.sh
-	sh install-assetrepo.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} latest ${stroageAccountName}
+	sh install-assetrepo.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} latest ${storageAccountName}
   fi
   
   if [[ "$runtimeMQ" == "True" ]]
