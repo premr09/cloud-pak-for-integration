@@ -19,6 +19,7 @@ export runtimeKafka=${17}
 export runtimeAspera=${18}
 export runtimeDataPower=${19}
 export productInstallationPath=${20}
+export stroageAccountName=${21}
 
 Pre-defined values
 #TODO: Can be user-provided
@@ -471,11 +472,12 @@ EOF
     sh install-ace-designer.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
   fi
 
-  if [[ "$capabilityAssetRepository" == "true" ]]
+  if [[ "$capabilityAssetRepository" == "True" ]]
   then
     echo "INFO: Installing Capability Asset Repository";
-    sh ${deploymentScriptsPath}/release-ar.sh -n ${namespace} -r assets-repo -a ${storageClass} -c ${storageClass}
-    wait_for_product AssetRepository assets-repo
+    curl ${productInstallationPath}/install-assetrepo.sh -o install-assetrepo.sh
+	chmod +x install-assetrepo.sh
+	sh install-assetrepo.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} latest ${stroageAccountName}
   fi
   
   if [[ "$runtimeMQ" == "True" ]]
