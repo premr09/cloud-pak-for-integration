@@ -472,7 +472,8 @@ EOF
     sh install-ace-designer.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
   fi
 
-  if [[ "$capabilityAssetRepository" == "True" ]]
+	
+  if [[ "$capabilityAssetRepository" == "true" ]]
   then
     echo "INFO: Installing Capability Asset Repository";
     curl ${productInstallationPath}/install-assetrepo.sh -o install-assetrepo.sh
