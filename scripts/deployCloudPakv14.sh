@@ -20,6 +20,7 @@ export runtimeAspera=${18}
 export runtimeDataPower=${19}
 export productInstallationPath=${20}
 export storageAccountName=${21}
+export user_email=${22}
 
 Pre-defined values
 #TODO: Can be user-provided
@@ -278,7 +279,7 @@ function wait_for_product {
     then
         currentStatus="$(oc get ${type} -n ${namespace} ${release_name} -o json | jq -r '.status.phase')"
 
-       if [ "$currentStatus" == "Ready" ] || [ "$currentStatus" == "Running" ]
+        if [ "$currentStatus" == "Ready" ] || [ "$currentStatus" == "Running" ]
         then
           status=true
         fi
@@ -412,7 +413,7 @@ EOF
   create_subscription ${namespace} "certified-operators" "couchdb-operator-certified" "stable"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-cloud-databases-redis-operator" "v1.1"
   create_subscription ${namespace} "ibm-operator-catalog" "aspera-hsts-operator" "v1.1"
-  #create_subscription ${namespace} "ibm-operator-catalog" "datapower-operator" "v1.1"
+  create_subscription ${namespace} "ibm-operator-catalog" "datapower-operator" "v1.1"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-appconnect" "v1.0"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-eventstreams" "v2.1"
   create_subscription ${namespace} "ibm-operator-catalog" "ibm-mq" "v1.1"
@@ -439,7 +440,13 @@ EOF
     retry true
   fi
 
+  # Download Email script
+  echo "INFO: Downloading email script...";
+  curl ${productInstallationPath}/email-notify.sh -o email-notify.sh
+  chmod +x email-notify.sh
+
   echo "INFO: CP4I Installed Successfully on project ${namespace}"
+  echo "${capabilityOperationsDashboard} + ${capabilityAPIConnect}"
 
   if [[ "$capabilityOperationsDashboard" == "true" ]]
   then
@@ -461,7 +468,9 @@ EOF
     echo "INFO: Installing Runtime App Connect Dashboard";
     curl ${productInstallationPath}/install-ace-dashboard.sh -o install-ace-dashboard.sh
     chmod +x install-ace-dashboard.sh
-    sh install-ace-dashboard.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
+    curl ${productInstallationPath}/install-ace-server.sh -o install-ace-server.sh
+    chmod +x install-ace-server.sh
+    sh install-ace-dashboard.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} ${user_email}
   fi
 
   if [[ "$capabilityAPPConenctDesigner" == "True" ]]
@@ -472,15 +481,15 @@ EOF
     sh install-ace-designer.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace}
   fi
 
-	
+
   if [[ "$capabilityAssetRepository" == "true" ]]
   then
     echo "INFO: Installing Capability Asset Repository";
     curl ${productInstallationPath}/install-assetrepo.sh -o install-assetrepo.sh
-	chmod +x install-assetrepo.sh
-	sh install-assetrepo.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} latest ${storageAccountName}
+    chmod +x install-assetrepo.sh
+    sh install-assetrepo.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} latest ${storageAccountName}
   fi
-  
+
   if [[ "$runtimeMQ" == "True" ]]
   then
     echo "INFO: Installing Runtime MQ";
@@ -489,8 +498,8 @@ EOF
     sh install-mq.sh ${CLUSTERNAME} ${DOMAINNAME} ${OPENSHIFTUSER} ${OPENSHIFTPASSWORD} ${namespace} "QM_CP4I" "SingleInstance" false true
     #wait_for_product QueueManager mq
   fi
-  
-  
+
+
   if [[ "$runtimeKafka" == "True" ]]
   then
     echo "INFO: Installing Runtime Kafka..";
@@ -512,7 +521,7 @@ EOF
     echo "INFO: Installing Runtime DataPower";
     sh ${deploymentScriptsPath}/release-datapower.sh -n ${namespace} -r datapower -p -a admin
     wait_for_product DataPowerService datapower
-  fi   
+  fi
 }
 
 install
