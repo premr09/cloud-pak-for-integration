@@ -67,17 +67,17 @@ echo $(date) " - Install Podman"
 yum install -y podman
 echo $(date) " - Install Podman Complete"
 
-echo $(data) " - Install jq"
-cd /tmp
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-EPELFILE=$(ls epel*.rpm)
-yum -y install $EPELFILE
-yum -y install jq
-echo $(date) " - Install jq Complete"
+#echo $(data) " - Install jq"
+#cd /tmp
+#wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#EPELFILE=$(ls epel*.rpm)
+#yum -y install $EPELFILE
+#yum -y install jq
+#echo $(date) " - Install jq Complete"
 
-echo $(date) " - Install httpd-tools"
-yum install -y httpd-tools
-echo $(date) " - Install httpd-tools Complete"
+#echo $(date) " - Install httpd-tools"
+#yum install -y httpd-tools
+#echo $(date) " - Install httpd-tools Complete"
 
 echo $(date) " - Download Binaries"
 runuser -l $SUDOUSER -c "mkdir -p /home/$SUDOUSER/.openshift"
