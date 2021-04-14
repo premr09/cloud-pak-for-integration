@@ -80,7 +80,7 @@
 		"redHatTags": {
 			"type": "object",
 			"metadata": {
-				"description": "Red Hat Tags"
+				"description": "Red Hat Tags for all VMS"
 			}
 		},
 		"pullSecret": {
