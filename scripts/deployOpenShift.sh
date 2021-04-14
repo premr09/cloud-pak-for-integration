@@ -60,7 +60,7 @@ then
     echo $(date) " - Root File System successfully extended"
 else
     echo $(date) " - Root File System failed to be grown"
-	exit 20
+	#exit 20
 fi
 
 echo $(date) " - Install Podman"
