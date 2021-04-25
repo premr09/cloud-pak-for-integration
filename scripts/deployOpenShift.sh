@@ -43,41 +43,41 @@ export OPENSHIFTUSER=${34}
 export INSTALLERHOME=/home/$SUDOUSER/.openshift
 
 # Grow Root File System
-#yum -y install cloud-utils-growpart.noarch
-#echo $(date) " - Grow Root FS"
+yum -y install cloud-utils-growpart.noarch
+echo $(date) " - Grow Root FS"
 
-#rootdev=`findmnt --target / -o SOURCE -n`
-#rootdrivename=`lsblk -no pkname $rootdev`
-#rootdrive="/dev/"$rootdrivename
-#name=`lsblk  $rootdev -o NAME | tail -1`
-#part_number=${name#*${rootdrivename}}
+rootdev=`findmnt --target / -o SOURCE -n`
+rootdrivename=`lsblk -no pkname $rootdev`
+rootdrive="/dev/"$rootdrivename
+name=`lsblk  $rootdev -o NAME | tail -1`
+part_number=${name#*${rootdrivename}}
 
-#growpart $rootdrive $part_number -u on
-#xfs_growfs $rootdev
+growpart $rootdrive $part_number -u on
+xfs_growfs $rootdev
 
-#if [ $? -eq 0 ]
-#then
-#    echo $(date) " - Root File System successfully extended"
-#else
-#    echo $(date) " - Root File System failed to be grown"
+if [ $? -eq 0 ]
+then
+    echo $(date) " - Root File System successfully extended"
+else
+    echo $(date) " - Root File System failed to be grown"
 	#exit 20
-#fi
+fi
 
 echo $(date) " - Install Podman"
 yum install -y podman
 echo $(date) " - Install Podman Complete"
 
-#echo $(data) " - Install jq"
-#cd /tmp
-#wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#EPELFILE=$(ls epel*.rpm)
-#yum -y install $EPELFILE
-#yum -y install jq
-#echo $(date) " - Install jq Complete"
+echo $(data) " - Install jq"
+cd /tmp
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+EPELFILE=$(ls epel*.rpm)
+yum -y install $EPELFILE
+yum -y install jq
+echo $(date) " - Install jq Complete"
 
-#echo $(date) " - Install httpd-tools"
-#yum install -y httpd-tools
-#echo $(date) " - Install httpd-tools Complete"
+echo $(date) " - Install httpd-tools"
+yum install -y httpd-tools
+echo $(date) " - Install httpd-tools Complete"
 
 echo $(date) " - Download Binaries"
 runuser -l $SUDOUSER -c "mkdir -p /home/$SUDOUSER/.openshift"
